@@ -28,7 +28,7 @@ class RegisterUserRequest extends FormRequest
             'phone' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'date_of_birth' => ['required', 'string', 'max:255'],
-//            'id_verification' => ['required', 'string', 'max:255'],
+            'id_verification' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
     }

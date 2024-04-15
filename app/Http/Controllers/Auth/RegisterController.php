@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterUserRequest;
 use App\Models\User;
+use App\Repositories\Interfaces\UserInterface;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -21,7 +22,6 @@ class RegisterController extends Controller
     | provide this functionality without requiring any additional code.
     |
     */
-
     use RegistersUsers;
 
     /**
@@ -36,9 +36,11 @@ class RegisterController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    protected $userRepository;
+    public function __construct(UserInterface $userRepository)
     {
         $this->middleware('guest');
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -60,15 +62,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'address' => $data['address'],
-            'phone' => $data['phone'],
-            'email' => $data['email'],
-            'date_of_birth' => $data['date_of_birth'],
-            'id_verification' => $data['id_verification'],
-            'password' => Hash::make($data['password']),
-        ]);
+        return $this->userRepository->create($data);
     }
 }

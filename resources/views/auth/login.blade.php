@@ -64,6 +64,7 @@
                                 @endif
                             </div>
                         </div>
+                        <div class="text-md-center mt-2">{{ __("Don't have an account?") }} <a href="{{route('register')}}">Sign Up</a></div>
                     </form>
                 </div>
             </div>

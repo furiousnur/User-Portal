@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header text-md-center">{{ __('Register Your Account') }}</div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
+                    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="row mb-3">
                             <div class="col-md-6">
@@ -108,6 +108,7 @@
                         </div>
                     </form>
                 </div>
+                <div class="text-md-center">{{ __('Already have an account?') }} <a href="{{route('login')}}">login</a></div>
             </div>
         </div>
     </div>
