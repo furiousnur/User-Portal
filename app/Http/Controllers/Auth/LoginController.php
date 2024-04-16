@@ -11,7 +11,6 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Redirect;
 
 class LoginController extends Controller
 {
@@ -33,7 +32,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/backend/dashboard';
 
     /**
      * Create a new controller instance.
@@ -43,6 +42,11 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    public function showLoginForm()
+    {
+        return redirect()->route('/');
     }
 
     public function login(Request $request)
@@ -75,7 +79,7 @@ class LoginController extends Controller
                 Auth::loginUsingId($user->id);
                 $expectedOtp->status = 'verified';
                 $expectedOtp->save();
-                return redirect()->route('home');
+                return redirect()->route('dashboard');
             }
             return view('auth.login-verification-form', compact('email'));
         }

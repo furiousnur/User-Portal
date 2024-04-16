@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\Backend\AdminController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,9 +17,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('auth.login');
+})->name('/');
 
 Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::post('/verify-otp', [LoginController::class, 'verifyOtp'])->name('otp.verify.post');
+
+/*Backend Routes*/
+Route::group(['prefix' => 'backend','middleware' => ['auth']], function() {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+});

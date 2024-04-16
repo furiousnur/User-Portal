@@ -1,0 +1,268 @@
+@extends('backend.layouts.layout')
+@section('content')
+<main class="app-content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-dashboard"></i> Invoice Reports</h1>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item"><a href="#">Invoice Reports</a></li>
+        </ul>
+    </div>
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success">
+            <p>{{ $message }}</p>
+        </div>
+    @endif
+    @if(Request::segment(2) == 'invoice-report')
+        <form action="{{route('invoice.report.generate')}}" method="post">
+        @csrf
+        <div class="col-sm-8 bg-white p-4">
+            {{--<div class="form-group row">
+                <label for="invoice_type" class="col-sm-2 col-form-label text-right">Invoice Type:</label>
+                <div class="col-sm-9">
+                    <select id="invoice_type" name="invoice_type" class="form-control">
+                        <option value="all" selected disabled readonly="">All</option>
+                        <option value="paid">Paid</option>
+                        <option value="account receivable">Account Receivable</option>
+                        <option value="void invoices">Void Invoices</option>
+                        <option value="expired product invoice">Expired Product Invoice</option>
+                    </select>
+                </div>
+            </div>--}}
+            <div class="form-group row">
+                <label for="client_id" class="col-sm-2 col-form-label text-right">Client ID:</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="client_id" name="client_id" placeholder="Client ID" value="{{old('client_id')}}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="business_name" class="col-sm-2 col-form-label text-right">Business Name:</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="business_name" name="business_name" placeholder="Business Name" value="{{old('business_name')}}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="product_code" class="col-sm-2 col-form-label text-right">Product Code:</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="product_code" name="product_code" placeholder="Product Code" value="{{old('product_code')}}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="lot_number" class="col-sm-2 col-form-label text-right">Lot Number:</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="lot_number" name="lot_number" placeholder="Lot Number" value="{{old('lot_number')}}">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="invoice_date" class="col-sm-2 col-form-label text-right">Invoice Date:</label>
+                <div class="col-sm-9">
+                    <div class="form-group row">
+                        <label for="invoice_date_from" class="col-sm-1 col-form-label text-left">From:</label>
+                        <div class="col-sm-4">
+                            <input type="date" class="form-control" name="invoice_date_from" id="invoice_date_from" value="{{old('invoice_date_from')}}">
+                        </div>
+                        <label for="invoice_date_to" class="col-sm-2 col-form-label text-right">To:</label>
+                        <div class="col-sm-5">
+                            <input type="date" class="form-control" name="invoice_date_to" id="invoice_date_to" value="{{old('invoice_date_to')}}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="invoice_number" class="col-sm-2 col-form-label text-right">Invoice Number:</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="invoice_number" name="invoice_number" placeholder="Invoice Number" value="{{old('invoice_number')}}">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col text-center">
+                    <button class="btn btn-primary text-white" type="submit"><i
+                            class="fa fa-fw fa-lg fa-check-circle"></i>Generate Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+    @endif
+
+    @if(isset($report))
+        <div class="col-sm-4 bg-white p-4">
+            <div class="form-group row">
+                <p>Generated By: {{auth()->user()->name}}</p>
+            </div>
+            <div class="form-group row">
+                <p>Invoice Number: {{$report->invoice_id}}</p>
+            </div>
+            <div class="form-group row">
+                <p>Invoice Date: {{$report->invoice_date}}</p>
+            </div>
+            <div class="form-group row">
+                <p>Business Name: {{$report->brand}}</p>
+            </div>
+            <div class="form-group row">
+                <p>Invoice Status:
+                    @if($report->due != 0)
+                        <span class="badge badge-danger">Unpaid</span>
+                    @else
+                        <span class="badge badge-success">Paid</span>
+                    @endif
+                </p>
+            </div>
+            <div class="form-group row">
+                <p>Client Name: {{$report->client_name}}</p>
+            </div>
+            <div class="form-group row">
+                <p>Client Address: {{$report->address}}</p>
+            </div>
+        </div>
+        <br><br><br>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tile">
+                    <div class="tile-body">
+                        <div class="table-responsive">
+                            <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-hover table-bordered dataTable no-footer"
+                                               id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+                                            <thead>
+                                                <th>Item No</th>
+                                                <th>Product Description</th>
+                                                <th>Quantity</th>
+                                                <th>Unit Price</th>
+                                                <th>Sub Total</th>
+                                                <th>Due</th>
+                                            </thead>
+                                            <tbody>
+                                                @if(!empty($report))
+                                                    <tr role="row" class="odd">
+                                                        <td>1</td>
+                                                        <td>{{$report->description}}</td>
+                                                        <td>{{$report->qty}}</td>
+                                                        <td>{{$report->unit_price}}</td>
+                                                        <td>{{$report->sub_total}}</td>
+                                                        <td>{{$report->due}}</td>
+                                                    </tr>
+                                                @else
+                                                    <tr>
+                                                        <td colspan="10">There are no data.</td>
+                                                    </tr>
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{--<div class="row mb-3">
+            <div class="col text-center">
+                <button class="btn btn-primary text-white" type="submit"><i
+                        class="fa fa-fw fa-lg fa-check-circle"></i>Add Payment
+                </button>
+                <button class="btn btn-info text-white" type="submit"><i
+                        class="fa fa-fw fa-lg fa-check-circle"></i>Void Invoice
+                </button>
+                <button class="btn btn-success text-white" type="submit"><i
+                        class="fa fa-fw fa-lg fa-check-circle"></i>Product Delivery
+                </button>
+            </div>
+        </div>--}}
+    @endif
+    @if(isset($reports) && count($reports) >=0)
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tile">
+                    <div class="tile-body">
+                        <div class="table-responsive">
+                            <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <table class="table table-hover table-bordered dataTable no-footer"
+                                               id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+                                            <thead>
+                                            <th>Invoice ID</th>
+                                            <th>Invoice Date</th>
+                                            <th>Business Name</th>
+                                            <th>Bill Amount</th>
+                                            <th>Generated By</th>
+                                            <th>Client Name</th>
+                                            <th>Client Address</th>
+                                            <th>Due</th>
+                                            <th>Last Paid Amount</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                            </thead>
+                                            <tbody>
+                                            @if(!empty($reports))
+                                                @foreach($reports as $key=>$report)
+                                                    <tr role="row" class="odd">
+                                                        <td>{{$report->invoice_id}}</td>
+                                                        <td>{{$report->invoice_date}}</td>
+                                                        <td>{{$report->brand}}</td>
+                                                        <td>{{$report->sub_total}}</td>
+                                                        <td>{{$report->name}}</td>
+                                                        <td>{{$report->client_name}}</td>
+                                                        <td>{{$report->address}}</td>
+                                                        <td>{{$report->due}}</td>
+                                                        <td>{{$report->pay_amount}}</td>
+                                                        <td>
+                                                            @if($report->due != 0)
+                                                                <span class="badge badge-danger">Unpaid</span>
+                                                            @else
+                                                                <span class="badge badge-success">Paid</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            <form action="" method="post">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <a href="{{route('invoice.pdf',$report->invId)}}"  target="_blank" class="btn btn-info">Open Invoice</a>
+                                                                <a href="{{route('pay.invoice.bill',$report->invId)}}" class="btn btn-success">Pay</a>
+{{--                                                                <button class="btn btn-danger mt-2" type="submit" onclick="return confirm('Are you sure you want to delete this item')">Delete</button>--}}
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                                <tr>
+                                                    <td colspan="10">There are no data.</td>
+                                                </tr>
+                                            @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+</main>
+@endsection
+@section('extra-script-link')
+<script type="text/javascript" src="{{asset('assets/js/plugins/bootstrap-datepicker.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('assets/js/plugins/select2.min.js')}}"></script>
+<script type="text/javascript">
+    $('#fromDate').datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        todayHighlight: true
+    });
+    $('#toDate').datepicker({
+        format: "dd/mm/yyyy",
+        autoclose: true,
+        todayHighlight: true
+    });
+
+    $('#demoSelect').select2();
+</script>
+@endsection
