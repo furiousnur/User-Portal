@@ -108,7 +108,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="text-md-center">{{ __('Already have an account?') }} <a href="{{route('login')}}">login</a></div>
+                <div class="text-md-center">{{ __('Already have an account?') }} <a href="{{route('login')}}">Login</a></div>
             </div>
         </div>
     </div>

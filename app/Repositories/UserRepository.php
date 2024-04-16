@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Models\User;
 use App\Repositories\Interfaces\UserInterface;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 
 class UserRepository implements UserInterface
 {
