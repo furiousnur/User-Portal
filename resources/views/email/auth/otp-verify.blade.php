@@ -7,11 +7,12 @@
                 <div class="card">
                     <div class="card-header">{{ __('Verify Your Login') }}</div>
                     <div class="card-body">
-                        <p>Hello,</p>
-                        <p>Your login verification OTP is <strong>{{ $otp }}</strong>.</p>
-                        <p>Please use this OTP to complete the login process.</p>
-                        <p>If you did not request this OTP, please disregard this email.</p>
-                        <p>Thank you!</p>
+                        <h2>Bit Mascot</h2>
+                        <p>To authenticate, please use the following Ont Time Password (OTP): <strong>{{ $otp }}</strong>.</p>
+                        <p>Don't share this OTP with anyone. we hope to see you again soon.</p>
+                        <br>
+                        <p>Regards,</p>
+                        <p>Bit Mascot</p>
                     </div>
                 </div>
             </div>

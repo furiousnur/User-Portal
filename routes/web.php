@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Backend\AdminController;
+use App\Http\Controllers\Backend\RoleController;
+use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', function () {
     return view('auth.login');
 })->name('/');
@@ -27,4 +30,14 @@ Route::post('/verify-otp', [LoginController::class, 'verifyOtp'])->name('otp.ver
 /*Backend Routes*/
 Route::group(['prefix' => 'backend','middleware' => ['auth']], function() {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+    //Role Permission Routes
+    Route::resource('/roles', RoleController::class);
+    Route::resource('/users', UserController::class);
+
+    Route::get('/check', function () {
+        $user = Auth::user();
+        $user->assignRole('Admin');
+        dd(Auth::user()->getRoleNames());
+    });
 });
