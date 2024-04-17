@@ -6,16 +6,16 @@
                 <div class="card">
                     <div class="card-header text-md-center"><h2>{{ __('Verification Code') }}</h2></div>
                     <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
+                        @if ($message = Session::get('error'))
+                            <div class="alert alert-danger">
+                                <p>{{ $message }}</p>
                             </div>
                         @endif
                         <p class="text-md-center">{{ __('An unique code has been sent to your email') }}</p>
                         <form method="POST" action="{{ route('otp.verify.post') }}">
                             @csrf
                             <div class="row mb-3">
-                                <label for="otp" class="col-md-4 col-form-label text-md-end">{{ __('Verification Cde') }}</label>
+                                <label for="otp" class="col-md-4 col-form-label text-md-end">{{ __('Verification Code') }}</label>
                                 <div class="col-md-6">
                                     <input id="otp" type="text" class="form-control @error('otp') is-invalid @enderror" name="otp" required placeholder="123456">
                                     @error('otp')

@@ -81,8 +81,8 @@ class LoginController extends Controller
                 $expectedOtp->save();
                 return redirect()->route('dashboard');
             }
-            return view('auth.login-verification-form', compact('email'));
+            return view('auth.login-verification-form', compact('email'))->with('error', 'Invalid OTP');
         }
-        return view('auth.login-verification-form', compact('email'));
+        return view('auth.login-verification-form', compact('email'))->with('error', 'Invalid User or OTP');
     }
 }

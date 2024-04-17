@@ -73,6 +73,21 @@ class RolePermissionSeeder extends Seeder
                 'id' => 8,
                 'name' => 'dashboard-sidebar',
                 'guard_name' => 'web'
+            ],
+            [
+                'id' => 9,
+                'name' => 'set-role',
+                'guard_name' => 'web'
+            ],
+            [
+                'id' => 10,
+                'name' => 'profile-sidebar',
+                'guard_name' => 'web'
+            ],
+            [
+                'id' => 11,
+                'name' => 'change-password-sidebar',
+                'guard_name' => 'web'
             ]
         ]);
         DB::table('model_has_roles')->insert([
@@ -107,6 +122,15 @@ class RolePermissionSeeder extends Seeder
                 'role_id' => 1
             ],[
                 'permission_id' => 8,
+                'role_id' => 1
+            ],[
+                'permission_id' => 9,
+                'role_id' => 1
+            ],[
+                'permission_id' => 10,
+                'role_id' => 1
+            ],[
+                'permission_id' => 11,
                 'role_id' => 1
             ]
         ]);

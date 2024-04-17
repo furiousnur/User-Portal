@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Backend\AdminController;
+use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\RoleController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\HomeController;
@@ -24,13 +25,14 @@ Route::get('/', function () {
 })->name('/');
 
 Auth::routes();
-Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::post('/verify-otp', [LoginController::class, 'verifyOtp'])->name('otp.verify.post');
 
 /*Backend Routes*/
 Route::group(['prefix' => 'backend','middleware' => ['auth']], function() {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-
+    Route::get('/profile-page', [ProfileController::class, 'profilePage'])->name('profile.page');
+    Route::get('/change-password', [ProfileController::class, 'changePassword'])->name('change.password');
+    Route::post('/password-update', [ProfileController::class, 'passwordUpdate'])->name('password.update');
     //Role Permission Routes
     Route::resource('/roles', RoleController::class);
     Route::resource('/users', UserController::class);

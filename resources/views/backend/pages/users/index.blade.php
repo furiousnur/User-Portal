@@ -44,7 +44,9 @@
                                                 <th>Date Of Birth</th>
                                                 <th>Id Verification</th>
                                                 <th>Roles</th>
-                                                <th>Action</th>
+                                                @can('set-role')
+                                                    <th>Action</th>
+                                                @endcan
                                             </tr>
                                             @foreach ($data as $key => $user)
                                                 <tr>
@@ -54,7 +56,7 @@
                                                     <td>{{ $user->phone }}</td>
                                                     <td>{{ $user->email }}</td>
                                                     <td>{{ $user->date_of_birth }}</td>
-                                                    <td>{{ $user->id_verification }}</td>
+                                                    <td><img width="100" height="120" src="{{ asset('uploads/' . $user->id_verification) }}" alt=""></td>
                                                     <td>
                                                         @if(!empty($user->getRoleNames()))
                                                             @foreach($user->getRoleNames() as $v)
@@ -62,9 +64,11 @@
                                                             @endforeach
                                                         @endif
                                                     </td>
-                                                    <td>
-                                                        <a class="btn btn-info" href="{{ route('users.edit',$user->id) }}">Set Role</a>
-                                                    </td>
+                                                    @can('set-role')
+                                                        <td>
+                                                            <a class="btn btn-info" href="{{ route('users.edit',$user->id) }}">Set Role</a>
+                                                        </td>
+                                                    @endcan
                                                 </tr>
                                             @endforeach
                                         </table>

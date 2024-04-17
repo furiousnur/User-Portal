@@ -3,21 +3,28 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Repositories\Interfaces\UserInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    protected $userRepository;
+    public function __construct(UserInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $data = User::latest()->paginate(5);
+        $data = $this->userRepository->index($request);
         return view('backend.pages.users.index',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
@@ -50,10 +57,8 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        $user = User::find($id);
-        $roles = Role::pluck('name','name')->all();
-        $userRole = $user->roles->pluck('name','name')->all();
-        return view('backend.pages.users.set-role',compact('user', 'roles', 'userRole'));
+        $compact = $this->userRepository->edit($id);
+        return view('backend.pages.users.set-role',$compact);
     }
 
     /**
@@ -64,18 +69,19 @@ class UserController extends Controller
         $request->validate([
             'roles' => 'required|array',
         ]);
-        $user = User::find($id);
+        $user = $this->userRepository->find($id);
         if (!$user) {
             return redirect()->route('users.index')->with('error', 'User not found.');
         }
         try {
-            $user->syncRoles($request->input('roles'));
+            $this->userRepository->syncRoles($user, $request->input('roles'));
         } catch (\Throwable $e) {
             return back()->with('error', 'Failed to update user roles.');
         }
-        return redirect()->route('users.index')
-            ->with('success','User updated successfully');
+
+        return redirect()->route('users.index')->with('success','User has been updated successfully');
     }
+
 
     /**
      * Remove the specified resource from storage.
