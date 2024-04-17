@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\OtpToken;
+use Brian2694\Toastr\Facades\Toastr;
 
 class Helper
 {
@@ -25,5 +26,15 @@ class Helper
         $otpToken->expires_at = now()->addMinutes(2);
         $otpToken->save();
         return $otp;
+    }
+
+    public static function toastrSuccess($message)
+    {
+        return Toastr::success($message, 'Success', ["positionClass" => "toast-top-right", "progressBar" => true, "timeOut" => "3000"]);
+    }
+
+    public static function toastrError($message)
+    {
+        return Toastr::error($message, 'Error', ["positionClass" => "toast-top-right", "progressBar" => true, "timeOut" => "3000"]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterUserRequest;
 use App\Repositories\Interfaces\UserInterface;
@@ -68,6 +69,7 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
         $this->create($request->all());
+        Helper::toastrSuccess('User has been registered successfully');
         return redirect()->route('login');
     }
 }

@@ -32,4 +32,5 @@ Laravel is accessible, powerful, and provides tools required for large, robust a
 7. php artisan migrate
 8. php artisan db:seed
 9. php artisan serve
-10. After registration, you will be redirected to the login page and you can login with the credentials but you will get empty sidebar in dashboard. You need to set Role from Admin panel in user list for specific user to get sidebar.
+10. I have checked mail functionality in this project. You need to set mail credentials in .env file to check mail functionality.I have used mailtrap for mail testing.
+11. After registration, you will be redirected to the login page and you can login with the credentials but you will get empty sidebar in dashboard. You need to set Role from Admin panel in user list for specific user to get sidebar.

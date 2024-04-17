@@ -21,6 +21,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/main.css')}}">
     <!-- Font-icon css-->
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
     @yield("extra-header-link")
 </head>
 <body class="app sidebar-mini">
@@ -84,8 +85,7 @@
 
     var ctxp = $("#pieChartDemo").get(0).getContext("2d");
     var pieChart = new Chart(ctxp).Pie(pdata);
-</script>
-<script type="text/javascript">
+
     if(document.location.hostname == 'pratikborsadiya.in') {
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -94,8 +94,7 @@
         ga('create', 'UA-72504830-1', 'auto');
         ga('send', 'pageview');
     }
-</script>
-<script>
+
     function display_ct5() {
         var x = new Date()
         var ampm = x.getHours( ) >= 12 ? ' PM' : ' AM';
@@ -110,5 +109,7 @@
     }
     display_c5()
 </script>
+<script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+{!! Toastr::message() !!}
 </body>
 </html>

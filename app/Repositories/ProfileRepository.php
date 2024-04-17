@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Helpers\Helper;
 use App\Models\User;
 use App\Repositories\Interfaces\ProfileInterface;
 use Illuminate\Support\Facades\Auth;
@@ -19,14 +20,17 @@ class ProfileRepository implements ProfileInterface
         $auth = Auth::user();
         if (!Hash::check($request->get('old_password'), $auth->password))
         {
-            return back()->with('error', "Old Password is Invalid");
+            Helper::toastrError("Old Password is Invalid");
+            return back();
         } else if (strcmp($request->get('old_password'), $request->password) == 0)
         {
-            return back()->with('error', "New Password cannot be same as your old password.");
+            Helper::toastrError("New Password cannot be same as your old password.");
+            return back();
         }
         $user =  User::find($auth->id);
         $user->password =  Hash::make($request->new_password);
         $user->save();
-        return redirect()->route('change.password')->with('success', 'Password has been updated successfully');
+        Helper::toastrSuccess("Password has been updated successfully");
+        return redirect()->route('change.password');
     }
 }

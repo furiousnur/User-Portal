@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RoleRequest;
 use App\Repositories\Interfaces\RoleInterface;
@@ -45,8 +46,8 @@ class RoleController extends Controller
     public function store(RoleRequest $request)
     {
         $this->roleRepository->store($request);
-        return redirect()->route('roles.index')
-            ->with('success','Role has been created successfully');
+        Helper::toastrSuccess('Role has been created successfully');
+        return redirect()->route('roles.index');
     }
 
     /**
@@ -73,8 +74,8 @@ class RoleController extends Controller
     public function update(RoleRequest $request, string $id)
     {
         $this->roleRepository->update($request, $id);
-        return redirect()->route('roles.index')
-            ->with('success','Role has been updated successfully');
+        Helper::toastrSuccess('Role has been updated successfully');
+        return redirect()->route('roles.index');
     }
 
     /**
@@ -83,7 +84,7 @@ class RoleController extends Controller
     public function destroy(string $id)
     {
         $this->roleRepository->destroy($id);
-        return redirect()->route('roles.index')
-            ->with('success','Role has been deleted successfully');
+        Helper::toastrSuccess('Role has been deleted successfully');
+        return redirect()->route('roles.index');
     }
 }

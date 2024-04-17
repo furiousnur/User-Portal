@@ -79,10 +79,13 @@ class LoginController extends Controller
                 Auth::loginUsingId($user->id);
                 $expectedOtp->status = 'verified';
                 $expectedOtp->save();
+                Helper::toastrSuccess('Login Successful');
                 return redirect()->route('dashboard');
             }
-            return view('auth.login-verification-form', compact('email'))->with('error', 'Invalid OTP');
+            Helper::toastrError('Invalid OTP');
+            return view('auth.login-verification-form', compact('email'));
         }
-        return view('auth.login-verification-form', compact('email'))->with('error', 'Invalid User or OTP');
+        Helper::toastrError('Invalid User or OTP');
+        return view('auth.login-verification-form', compact('email'));
     }
 }

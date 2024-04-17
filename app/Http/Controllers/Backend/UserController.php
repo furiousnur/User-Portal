@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\UserInterface;
 use Illuminate\Http\Request;
@@ -71,15 +72,17 @@ class UserController extends Controller
         ]);
         $user = $this->userRepository->find($id);
         if (!$user) {
-            return redirect()->route('users.index')->with('error', 'User not found.');
+            Helper::toastrError('User not found.');
+            return redirect()->route('users.index');
         }
         try {
             $this->userRepository->syncRoles($user, $request->input('roles'));
         } catch (\Throwable $e) {
-            return back()->with('error', 'Failed to update user roles.');
+            Helper::toastrError('Failed to update user roles.');
+            return back();
         }
-
-        return redirect()->route('users.index')->with('success','User has been updated successfully');
+        Helper::toastrSuccess('User has been updated successfully');
+        return redirect()->route('users.index');
     }
 
 
