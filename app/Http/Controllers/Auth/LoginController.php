@@ -74,7 +74,7 @@ class LoginController extends Controller
         $email = $request->email;
         $expectedOtp = OtpToken::where('email', $email)->where('status', 'pending')->latest()->first();
         $user = User::where('email', $email)->first();
-        if($expectedOtp){
+        if($expectedOtp && $user){
             if($otp == $expectedOtp->otp && $expectedOtp->expires_at > now()){
                 Auth::loginUsingId($user->id);
                 $expectedOtp->status = 'verified';

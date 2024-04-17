@@ -15,7 +15,7 @@ class UserRepository implements UserInterface
             $fileName = time() . '_' . $file->getClientOriginalName();
             $file->storeAs('uploads', $fileName);
         }
-        return User::create([
+         User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'address' => $data['address'],

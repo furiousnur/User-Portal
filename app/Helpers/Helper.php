@@ -15,7 +15,10 @@ class Helper
     public static function generateOtp($data)
     {
         $email = $data->email;
-        $otp = strval(random_int(100000, 999999));
+        do {
+            $otp = strval(random_int(100000, 999999));
+            $checkOtp = OtpToken::where('otp', $otp)->first();
+        } while ($checkOtp);
         $otpToken = new OtpToken();
         $otpToken->email = $email;
         $otpToken->otp = $otp;

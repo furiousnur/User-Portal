@@ -15,5 +15,8 @@
                 </a>
             </li>
         @endcan
+{{--        @can('role-sidebar')--}}
+            <li><a class="app-menu__item {{ Request::segment(1) == 'roles'  ? 'active' : ''}}" href="{{route('roles.index')}}"><i class="app-menu__icon fa fa-assistive-listening-systems"></i><span class="app-menu__label">Roles</span></a></li>
+{{--        @endcan--}}
     </ul>
 </aside>

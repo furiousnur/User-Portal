@@ -44,6 +44,7 @@
                                                 <th>Date Of Birth</th>
                                                 <th>Id Verification</th>
                                                 <th>Roles</th>
+                                                <th>Action</th>
                                             </tr>
                                             @foreach ($data as $key => $user)
                                                 <tr>
@@ -60,6 +61,9 @@
                                                                 <label class="badge badge-success">{{ $v }}</label>
                                                             @endforeach
                                                         @endif
+                                                    </td>
+                                                    <td>
+                                                        <a class="btn btn-info" href="{{ route('users.edit',$user->id) }}">Set Role</a>
                                                     </td>
                                                 </tr>
                                             @endforeach

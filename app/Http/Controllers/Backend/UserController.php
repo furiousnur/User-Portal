@@ -50,7 +50,10 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::find($id);
+        $roles = Role::pluck('name','name')->all();
+        $userRole = $user->roles->pluck('name','name')->all();
+        return view('backend.pages.users.set-role',compact('user', 'roles', 'userRole'));
     }
 
     /**
@@ -58,7 +61,20 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'roles' => 'required|array',
+        ]);
+        $user = User::find($id);
+        if (!$user) {
+            return redirect()->route('users.index')->with('error', 'User not found.');
+        }
+        try {
+            $user->syncRoles($request->input('roles'));
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Failed to update user roles.');
+        }
+        return redirect()->route('users.index')
+            ->with('success','User updated successfully');
     }
 
     /**
