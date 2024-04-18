@@ -36,4 +36,5 @@ Route::group(['prefix' => 'backend','middleware' => ['auth']], function() {
     //Role Permission Routes
     Route::resource('/roles', RoleController::class);
     Route::resource('/users', UserController::class);
+    Route::get('/search', [UserController::class, 'search'])->name('users.search');
 });

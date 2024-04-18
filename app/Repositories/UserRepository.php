@@ -52,4 +52,18 @@ class UserRepository implements UserInterface
     {
         $user->syncRoles($roles);
     }
+
+    public function search($request)
+    {
+        try {
+            $query = $request->input('searchKeywords');
+            $users = User::where('first_name', 'like', '%'.$query.'%')
+                ->orWhere('last_name', 'like', '%'.$query.'%')
+                ->orWhere('email', 'like', '%'.$query.'%')
+                ->paginate(10);
+            return $users;
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }

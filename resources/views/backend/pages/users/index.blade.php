@@ -20,11 +20,6 @@
                 </div>
             </div>
         </div>
-        @if ($message = Session::get('success'))
-            <div class="alert alert-success">
-                <p>{{ $message }}</p>
-            </div>
-        @endif
         <div class="row">
             <div class="col-md-12">
                 <div class="tile">
@@ -34,9 +29,8 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <table class="table table-hover table-bordered dataTable no-footer"
-                                               id="sampleTable" role="grid" aria-describedby="sampleTable_info">
+                                               id="userTable" role="grid" aria-describedby="userTable_info">
                                             <tr>
-                                                <th>No</th>
                                                 <th>Name</th>
                                                 <th>Address</th>
                                                 <th>Phone</th>
@@ -50,7 +44,6 @@
                                             </tr>
                                             @foreach ($data as $key => $user)
                                                 <tr>
-                                                    <td>{{ ++$i }}</td>
                                                     <td>{{ $user->first_name }} {{$user->last_name}}</td>
                                                     <td>{{ $user->address }}</td>
                                                     <td>{{ $user->phone }}</td>
@@ -82,4 +75,30 @@
         </div>
         {!! $data->render() !!}
     </main>
+@endsection
+@section("extra-script-link")
+   <script>
+        $(document).ready(function() {
+            $('#search').on('input', function() {
+                var data = $(this).val();
+                $.ajax({
+                    url: "{{ route('users.search') }}",
+                    type: "GET",
+                    dataType:'html',
+                    headers:{
+                        'accept':"Application/json",
+                        'content-type':"Application/json"
+                    },
+                    data: { searchKeywords: data },
+                    success: function(response) {
+                        $('#userTable tbody').empty();
+                        $('#userTable tbody').html($(response).find('#userTable tbody').html());
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

@@ -11,4 +11,5 @@ interface UserInterface
     public function edit(string $id);
     public function find($id);
     public function syncRoles($user, array $roles);
+    public function search($request);
 }

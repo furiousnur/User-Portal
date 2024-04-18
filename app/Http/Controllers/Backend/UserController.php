@@ -26,7 +26,16 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $data = $this->userRepository->index($request);
-        return view('backend.pages.users.index',compact('data'))->with('i', ($request->input('page', 1) - 1) * 5);
+        return view('backend.pages.users.index', compact('data'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function search(Request $request)
+    {
+        $data = $this->userRepository->search($request);
+        return view('backend.pages.users.index',compact('data'))->render();
     }
 
     /**
