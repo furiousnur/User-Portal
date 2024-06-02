@@ -51,7 +51,21 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $this->validateLogin($request);
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string|min:8',
+        ]);
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $request->session()->regenerate();
+            Helper::toastrSuccess('Login Successful');
+            return redirect()->route('dashboard');
+        }else{
+            Helper::toastrError('Invalid Credentials');
+            return back()->withErrors([
+                'email' => 'The provided credentials do not match our records.',
+            ]);
+        }
+        /*$this->validateLogin($request);
         if (method_exists($this, 'hasTooManyLoginAttempts') &&
             $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
@@ -61,7 +75,7 @@ class LoginController extends Controller
         $email = $request->email;
         $otp = Helper::generateOtp($request);
         Mail::to($email)->send(new OtpMail($otp));
-        return view('auth.login-verification-form', compact('email'));
+        return view('auth.login-verification-form', compact('email'));*/
     }
 
     public function verifyOtp(Request $request)
